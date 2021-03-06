@@ -1,0 +1,128 @@
+#+TITLE: IBAN validation ISO 13616-Compliant IBAN Formats, Release 89 – March 2021
+
+A library to validate IBANs in Clojure.
+
+The library validates agains the "Release 89 – March 2021" specification.
+
+* Usage
+** Specs
+
+   When using spec validation the validation is strict.
+
+   #+BEGIN_SRC clojure :results output code
+     (ns user
+       (:require
+        [clojure.spec.alpha :as s]
+        [se.jherrlin.iban :as iban]))
+
+
+     ;; Is a string a valid IBAN?
+     (s/valid? ::iban/iban "LC55HEMM000100010012001200023015")
+     ;; => true
+
+
+     ;; Is the string valid Swedish IBAN?
+     (s/valid? ::iban/SE "LC55HEMM000100010012001200023015")
+     ;; => false
+
+
+     ;; Is the string valid Saint Lucia IBAN?
+     (s/valid? ::iban/LC "LC55HEMM000100010012001200023015")
+     ;; => true
+
+
+     ;; What type of IBAN?
+     (s/conform ::iban/iban "LC55HEMM000100010012001200023015")
+     ;; => [:LC "LC55HEMM000100010012001200023015"]
+   #+END_SRC
+
+** Regex
+
+   Regex validation is by default more relaxed, is will return a match as long
+   as some part of the string matches the pattern.
+
+   #+BEGIN_SRC clojure :results output code
+     (ns user
+       (:require
+        [se.jherrlin.iban :as iban]))
+
+
+     ;; A big regex to match any IBAN
+     (iban/regexs)
+     ;; => #"AD\d{2}\d{4}\d{4}[a-zA-Z0-9]{12}|AE\d{2}\d{3}\d{16}|AL\d{2}\d{8}[a-zA-Z0-9]{16}|AT..."
+
+
+     ;; Regex to match a Swedish IBAN
+     (iban/regex :SE)
+     ;; => #"SE\d{2}\d{3}\d{16}\d{1}"
+
+
+     ;; I wanna find a Swedish IBAN in this string
+     (re-find
+      (iban/regex :SE)
+      "Hej och välkommen till din bank! Här är ditt IBAN: SE4550000000058398257466")
+     ;; => "SE4550000000058398257466"
+
+
+     ;; Find all IBANs in a string
+     (re-seq (iban/regexs)
+             "CR05015202001026284066
+     ,LC55HEMM000100010012001200023015
+     ,HEJSAN,HOPPSAN,MK07250120000058984")
+     ;; => ("CR05015202001026284066" "LC55HEMM000100010012001200023015" "MK07250120000058984")
+   #+END_SRC
+
+   Strict regex are available to. Strict regex are used in the specs.
+
+   #+BEGIN_SRC clojure :results output code
+     (ns user
+       (:require
+        [se.jherrlin.iban :as iban]))
+
+
+     ;; I wanna find a Swedish IBAN in this string
+     (re-find
+      (iban/regex-strict :SE) ;; => #"^SE\d{2}\d{3}\d{16}\d{1}$"
+      "Hej och välkommen till din bank! Här är ditt IBAN: SE4550000000058398257466")
+     ;; => nil
+   #+END_SRC
+
+** Info
+
+   Get info about registry entry.
+
+   #+BEGIN_SRC clojure :results output code
+     (ns user
+       (:require
+        [se.jherrlin.iban :as iban]))
+
+     (iban/info :SE)
+     ;; =>
+     {:id                        :SE,
+      :iban-structure            "SE2!n3!n16!n1!n",
+      :electronic-format-example "SE4550000000058398257466",
+      :self-validate             true,
+      :iban-regex                #"SE\d{2}\d{3}\d{16}\d{1}",
+      :iban-regex-strict         #"^SE\d{2}\d{3}\d{16}\d{1}$",
+      :iban-length               24,
+      :effective-date            "Apr-07",
+      :print-format-example      "SE45 5000 0000 0583 9825 7466",
+      :country                   "Sweden"}
+   #+END_SRC
+
+* Details
+
+  The IBAN format registry is parsed from [[https://www.swift.com/resource/iban-registry-pdf][this]] file.
+
+  The registry lives in the =se.jherrlin.iban.registry= namespace.
+
+  The registry data structure can be reproduced using code in the
+  =se.jherrlin.iban.registry.parser= namespace.
+
+* Update deps
+
+  Instructions on how to update dependencies.
+
+  #+BEGIN_SRC shell :results output code
+    clojure -Moutdated --write
+  #+END_SRC
