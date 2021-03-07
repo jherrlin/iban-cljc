@@ -1,8 +1,8 @@
 (ns se.jherrlin.iban.registry.parser
   (:require
-   [pdfboxing.text :as text]
    [clj-http.client :as client]
-   [clojure.string :as str]))
+   [clojure.string :as str]
+   [pdfboxing.text :as text]))
 
 
 ;; Regexps to find text in PDF
@@ -83,30 +83,20 @@
   [structure]
   (->> (re-seq #"(\d+)(!?)([nace])" structure)
        (map build-regex-atom)
-       (reduce str (subs structure 0 2))
-       (re-pattern)))
-
-(defn build-iban-regex-strict
-  "Build the full registry regex from structure."
-  [structure]
-  (->> (re-seq #"(\d+)(!?)([nace])" structure)
-       (map build-regex-atom)
-       (#(concat % ["$"]))  ;; append, word boundry
-       (reduce str (str "^" ;; prepend,
-                        (subs structure 0 2)))
-       (re-pattern)))
+       (reduce str (subs structure 0 2))))
 
 (defn add-regex
   "Add registry regex to iban map."
   [{:keys [iban-structure] :as m}]
-  (assoc m
-         :iban-regex        (build-iban-regex iban-structure)
-         :iban-regex-strict (build-iban-regex-strict iban-structure)))
+  (let [regex (build-iban-regex iban-structure)]
+    (assoc m
+           :iban-regex        regex
+           :iban-regex-strict (str "^" regex "$"))))
 
 (defn self-validate
   "The registry contains examples, so validate the built regex against that."
   [{:keys [electronic-format-example iban-regex iban-length] :as m}]
-  (assoc m :self-validate (->> (re-find iban-regex electronic-format-example)
+  (assoc m :self-validate (->> (re-find (re-pattern iban-regex) electronic-format-example)
                                (count)
                                (= iban-length))))
 
@@ -142,7 +132,6 @@
                       (request-pdf!)
                       (save-pdf-file!)
                       (pdf->text))]
-    (def pdf-text pdf-text)
     {:url      url
      :info     (release-and-year pdf-text)
      :registry (registry pdf-text)}))

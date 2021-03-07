@@ -26,14 +26,14 @@
   ([id]
    (regex registry/registry id))
   ([registry id]
-   (get-in registry [:registry id :iban-regex])))
+   (re-pattern (get-in registry [:registry id :iban-regex]))))
 
 (defn regex-strict
   "Strict regex for a single registry entry."
   ([id]
    (regex-strict registry/registry id))
   ([registry id]
-   (get-in registry [:registry id :iban-regex-strict])))
+   (re-pattern (get-in registry [:registry id :iban-regex-strict]))))
 
 (defn info
   "Info about a registry entry."
