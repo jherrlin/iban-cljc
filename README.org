@@ -36,6 +36,26 @@ The library validates agains the "Release 89 – March 2021" specification.
      ;; => [:LC "LC55HEMM000100010012001200023015"]
    #+END_SRC
 
+   Generate IBANs from Clojure specs and =test.check=.
+
+   #+BEGIN_SRC clojure :results output code
+     (ns user
+       (:require
+        [clojure.spec.alpha :as s]
+        [clojure.test.check.generators :as gen]
+        [se.jherrlin.iban :as iban]))
+
+
+     ;; Generate a valid Swedish IBAN
+     (gen/generate (s/gen ::iban/SE))
+     ;; => "SE5140802154253977450967"
+
+
+     ;; Generate random IBAN
+     (gen/generate (s/gen ::iban/iban))
+     ;; => "GI44LUUZT2q6MaMwB4adbkY"
+   #+END_SRC
+
 ** Regex
 
    Regex validation is by default more relaxed, is will return a match as long

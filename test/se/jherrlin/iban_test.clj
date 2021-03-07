@@ -1,10 +1,11 @@
 (ns se.jherrlin.iban-test
   (:require
    [clojure.spec.alpha :as s]
+   [clojure.test :as t]
+   [clojure.test.check.generators :as gen]
    [se.jherrlin.iban :as iban]
    [se.jherrlin.iban.registry :as registry]
-   [se.jherrlin.iban.specs]
-   [clojure.test :as t]))
+   [se.jherrlin.iban.specs]))
 
 
 (comment
@@ -27,6 +28,9 @@
   )
 
 
+(t/deftest generators
+  (t/is (string? (gen/generate (s/gen ::iban/SE))))
+  (t/is (string? (gen/generate (s/gen ::iban/iban)))))
 
 (t/deftest find-in-str
   (t/is (= (re-seq (iban/regexs) "CR05015202001026284066,LC55HEMM000100010012001200023015,HEJSAN,HOPPSAN,MK07250120000058984")
