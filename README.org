@@ -7,7 +7,7 @@ The library validates agains the "Release 89 – March 2021" specification.
 * Usage
 ** Specs
 
-   When using spec validation the validation is strict.
+   When using spec the validation is strict.
 
    #+BEGIN_SRC clojure :results output code
      (ns user
@@ -46,12 +46,12 @@ The library validates agains the "Release 89 – March 2021" specification.
         [se.jherrlin.iban :as iban]))
 
 
-     ;; Generate a valid Swedish IBAN
+     ;; Generate a valid Swedish IBAN.
      (gen/generate (s/gen ::iban/SE))
      ;; => "SE5140802154253977450967"
 
 
-     ;; Generate random IBAN
+     ;; Generate random IBAN.
      (gen/generate (s/gen ::iban/iban))
      ;; => "GI44LUUZT2q6MaMwB4adbkY"
    #+END_SRC
@@ -67,24 +67,24 @@ The library validates agains the "Release 89 – March 2021" specification.
         [se.jherrlin.iban :as iban]))
 
 
-     ;; A big regex to match any IBAN
+     ;; A big regex to match any IBAN, truncated.
      (iban/regexs)
      ;; => #"AD\d{2}\d{4}\d{4}[a-zA-Z0-9]{12}|AE\d{2}\d{3}\d{16}|AL\d{2}\d{8}[a-zA-Z0-9]{16}|AT..."
 
 
-     ;; Regex to match a Swedish IBAN
+     ;; Regex to match a Swedish IBAN.
      (iban/regex :SE)
      ;; => #"SE\d{2}\d{3}\d{16}\d{1}"
 
 
-     ;; I wanna find a Swedish IBAN in this string
+     ;; I wanna find a Swedish IBAN in this string.
      (re-find
       (iban/regex :SE)
       "Hej och välkommen till din bank! Här är ditt IBAN: SE4550000000058398257466")
      ;; => "SE4550000000058398257466"
 
 
-     ;; Find all IBANs in a string
+     ;; Find all IBANs in a string.
      (re-seq (iban/regexs)
              "CR05015202001026284066
      ,LC55HEMM000100010012001200023015
@@ -100,11 +100,17 @@ The library validates agains the "Release 89 – March 2021" specification.
         [se.jherrlin.iban :as iban]))
 
 
-     ;; I wanna find a Swedish IBAN in this string
+     ;; I wanna find a Swedish IBAN in this string.
      (re-find
       (iban/regex-strict :SE) ;; => #"^SE\d{2}\d{3}\d{16}\d{1}$"
       "Hej och välkommen till din bank! Här är ditt IBAN: SE4550000000058398257466")
      ;; => nil
+
+     ;; But it finds it here.
+     (re-find
+      (iban/regex-strict :SE) ;; => #"^SE\d{2}\d{3}\d{16}\d{1}$"
+      "SE4550000000058398257466")
+     ;; => "SE4550000000058398257466"
    #+END_SRC
 
 ** Info
@@ -118,13 +124,13 @@ The library validates agains the "Release 89 – March 2021" specification.
 
      (iban/info :SE)
      ;; =>
-     {:id                        :SE,
-      :iban-structure            "SE2!n3!n16!n1!n",
-      :electronic-format-example "SE4550000000058398257466",
+     {:electronic-format-example "SE4550000000058398257466",
       :self-validate             true,
-      :iban-regex                #"SE\d{2}\d{3}\d{16}\d{1}",
-      :iban-regex-strict         #"^SE\d{2}\d{3}\d{16}\d{1}$",
+      :iban-regex                "SE\\d{2}\\d{3}\\d{16}\\d{1}",
+      :iban-regex-strict         "^SE\\d{2}\\d{3}\\d{16}\\d{1}$",
       :iban-length               24,
+      :iban-structure            "SE2!n3!n16!n1!n",
+      :id                        :SE,
       :effective-date            "Apr-07",
       :print-format-example      "SE45 5000 0000 0583 9825 7466",
       :country                   "Sweden"}

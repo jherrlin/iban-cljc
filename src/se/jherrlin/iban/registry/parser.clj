@@ -1,11 +1,17 @@
 (ns se.jherrlin.iban.registry.parser
+  "This file is for development purposes and contains dependencies that are only
+  needed when developing.
+
+  This file takes care of download and parsing of the IBAN PDF and returns a
+  registry data structure. The registry data structure is serialazable."
   (:require
    [clj-http.client :as client]
+   [clojure.java.io :as io]
    [clojure.string :as str]
-   [pdfboxing.text :as text]))
+   [pdfboxing.text :as text]
+   [se.jherrlin.iban.registry]))
 
 
-;; Regexps to find text in PDF
 (def CountryName    #"(?<=Name of country)(?<CountryName>\s+\b[A-Z].*\v)")
 (def CountryCode    #"(?<=IBAN prefix country code \(ISO 3166\))(?<CountryCode>\s+\b[A-Z]{2}\b)")
 (def IBANstructure  #"(?<=IBAN structure)(?<IBANstructure>\s+\b[A-Z]{2}.*\b)")
@@ -76,14 +82,21 @@
   "Build the smallest piece of the regex."
   [[_ lenght fixed-length reg]]
   (let [fixed-length (seq fixed-length)]
-    (str (get convetions-map reg) "{" (when-not fixed-length "0,") lenght "}")))
+    [(get convetions-map reg) "{" (when-not fixed-length "0,") lenght "}"]))
+
+(defn parse-structure
+  "Find the structure patterns in structure string."
+  [structure]
+  (re-seq #"(\d+)(!?)([nace])" structure))
 
 (defn build-iban-regex
   "Build the full registry regex from structure."
   [structure]
-  (->> (re-seq #"(\d+)(!?)([nace])" structure)
+  (->> (parse-structure structure)
        (map build-regex-atom)
-       (reduce str (subs structure 0 2))))
+       (cons (subs structure 0 2))
+       (map (partial apply str))
+       (reduce str)))
 
 (defn add-regex
   "Add registry regex to iban map."
@@ -137,9 +150,19 @@
      :registry (registry pdf-text)}))
 
 (comment
-  (def iban-registry (iban-registry! "https://www.swift.com/resource/iban-registry-pdf"))
+  (def iban-registry-from-online
+    (get (iban-registry! "https://www.swift.com/resource/iban-registry-pdf") :registry))
 
-  (->> iban-registry
+  (def iban-registry-from-resource
+    (registry
+     (text/extract
+      (.getFile (io/resource "SWIFT_IBAN_Registry-downloaded-2021-03-06.pdf")))))
+
+  (= iban-registry-from-online
+     iban-registry-from-resource
+     (:registry se.jherrlin.iban.registry/registry))
+
+  (->> iban-registry-from-online
        :registry
        (vals)
        (map :self-validate))

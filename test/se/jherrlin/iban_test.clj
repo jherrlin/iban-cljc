@@ -33,19 +33,21 @@
   (t/is (string? (gen/generate (s/gen ::iban/iban)))))
 
 (t/deftest find-in-str
-  (t/is (= (re-seq (iban/regexs) "CR05015202001026284066,LC55HEMM000100010012001200023015,HEJSAN,HOPPSAN,MK07250120000058984")
+  (t/is (= (re-seq (iban/regexs) "CR05015202001026284066,LC55HEMM000100010012001200023015
+,HEJSAN,HOPPSAN,MK07250120000058984")
            '("CR05015202001026284066"
              "LC55HEMM000100010012001200023015"
              "MK07250120000058984"))))
 
 (t/deftest regex
+  (t/is (nil? (re-find (iban/regex :LC) "LC55HEMM0001000100")))
   (t/is (= (re-find (iban/regex :LC) "LC55HEMM000100010012001200023015")
            "LC55HEMM000100010012001200023015"))
-
   (t/is (= (re-find (iban/regex :LC) "SOME TEXT LC55HEMM000100010012001200023015 SOMETHIN MORE")
            "LC55HEMM000100010012001200023015")))
 
 (t/deftest CR05015202001026284066
+  (t/is (not (s/valid? :se.jherrlin.iban/iban "CR05015202001")))
   (t/is (s/valid? :se.jherrlin.iban/iban "CR05015202001026284066"))
   (t/is (= (s/conform :se.jherrlin.iban/iban "CR05015202001026284066")
            [:CR "CR05015202001026284066"]))

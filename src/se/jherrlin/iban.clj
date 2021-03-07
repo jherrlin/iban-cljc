@@ -9,10 +9,15 @@
   [& patterns]
   (re-pattern (apply str (interpose "|" (map str patterns)))))
 
+(defn registry
+  "The IBAN registry data structure."
+  []
+  registry/registry)
+
 (defn regexs
   "Takes an optional `registry` and returns a huge regex for all IBANs."
   ([]
-   (regexs registry/registry))
+   (regexs (registry)))
   ([registry]
    (->> registry
         :registry
@@ -24,27 +29,20 @@
 (defn regex
   "Regex for a single registry entry."
   ([id]
-   (regex registry/registry id))
+   (regex (registry) id))
   ([registry id]
    (re-pattern (get-in registry [:registry id :iban-regex]))))
 
 (defn regex-strict
   "Strict regex for a single registry entry."
   ([id]
-   (regex-strict registry/registry id))
+   (regex-strict (registry) id))
   ([registry id]
    (re-pattern (get-in registry [:registry id :iban-regex-strict]))))
 
 (defn info
   "Info about a registry entry."
   ([id]
-   (info registry/registry id))
+   (info (registry) id))
   ([registry id]
    (get-in registry [:registry id])))
-
-
-
-(comment
-  (regexs)
-  (regex :SV)
-  )
