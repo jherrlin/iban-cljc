@@ -10,7 +10,7 @@
 
 (comment
   ;; Generate and run
-  (doseq [sexp (->> registry/registry
+  (doseq [sexp (->> registry/data
                     :registry
                     vals
                     (map (fn [{:keys [electronic-format-example id]}]

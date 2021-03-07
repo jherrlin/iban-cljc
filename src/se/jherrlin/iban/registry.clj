@@ -1,7 +1,8 @@
-(ns se.jherrlin.iban.registry)
+(ns se.jherrlin.iban.registry
+  "This namespace is only for storing the registry data structure.")
 
 
-(def registry
+(def data
   {:url  "https://www.swift.com/resource/iban-registry-pdf",
    :info "Release 89 – March 2021",
    :registry

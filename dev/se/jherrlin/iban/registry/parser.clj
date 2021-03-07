@@ -71,7 +71,7 @@
    :electronic-format-example (nth xs 5)
    :print-format-example      (nth xs 6)})
 
-(def convetions-map
+(def conversion-map
   "Conversion map from structure char to regexp."
   {"n" "\\d"            ;; Digits (numeric characters 0 to 9 only)
    "a" "[A-Z]"          ;; Upper case letters (alphabetic characters A-Z only)
@@ -82,7 +82,7 @@
   "Build the smallest piece of the regex."
   [[_ lenght fixed-length reg]]
   (let [fixed-length (seq fixed-length)]
-    [(get convetions-map reg) "{" (when-not fixed-length "0,") lenght "}"]))
+    [(get conversion-map reg) "{" (when-not fixed-length "0,") lenght "}"]))
 
 (defn parse-structure
   "Find the structure patterns in structure string."
@@ -160,7 +160,7 @@
 
   (= iban-registry-from-online
      iban-registry-from-resource
-     (:registry se.jherrlin.iban.registry/registry))
+     (:registry se.jherrlin.iban.registry/data))
 
   (->> iban-registry-from-online
        :registry
