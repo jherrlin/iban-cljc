@@ -21,9 +21,8 @@
   (iban/regexs)                                                ;; Regex that matches all IBANs.
   (iban/regex :SE)                                             ;; Regex to match Swe IBANs."
   (:require
-   [se.jherrlin.iban.registry :as iban.registry]
-   [se.jherrlin.iban.specs]))
-
+   [se.jherrlin.iban.lib.registry :as registry]
+   se.jherrlin.iban.lib.specs))
 
 (defn union-re-patterns
   "Combine regexps."
@@ -33,7 +32,7 @@
 (defn registry
   "The IBAN registry data structure."
   []
-  iban.registry/data)
+  registry/data)
 
 (defn regexs
   "Takes an optional `registry` and returns a huge regex for all IBANs."

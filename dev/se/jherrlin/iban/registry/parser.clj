@@ -9,7 +9,7 @@
    [clojure.java.io :as io]
    [clojure.string :as str]
    [pdfboxing.text :as text]
-   [se.jherrlin.iban.registry]))
+   [se.jherrlin.iban.lib.registry]))
 
 
 (def CountryName    #"(?<=Name of country)(?<CountryName>\s+\b[A-Z].*\v)")
@@ -160,7 +160,7 @@
 
   (= iban-registry-from-online
      iban-registry-from-resource
-     (:registry se.jherrlin.iban.registry/data))
+     (:registry se.jherrlin.iban.lib.registry/data))
 
   (->> iban-registry-from-online
        :registry
