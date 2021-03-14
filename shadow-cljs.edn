@@ -1,13 +1,10 @@
 ;; shadow-cljs configuration
 {:source-paths
- ["src" "dev" "resources"]
-
- :dependencies
- []
+ ["src" "dev"]
 
  :builds
- {:app {:target :browser
-        :output-dir "resources/public/js"
+ {:app {:target     :browser
+        :output-dir "dev/public/js"
         :asset-path "/js"
 
         :modules
@@ -16,13 +13,5 @@
 
         ;; start a development http server on http://localhost:8020
         :devtools
-        {:http-root "resources/public"
-         :http-port 8020}
-        }}}
-
-
-;; {:dev-http {8080 "public"}
-;;  :builds
-;;  {:frontend
-;;   {:target :browser
-;;    :modules {:main {:init-fn se.jherrlin.view/init}}}}}
+        {:http-root "dev/public"
+         :http-port 8020}}}}
