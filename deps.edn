@@ -3,6 +3,11 @@
  :aliases {:develop  {:extra-paths ["dev" "resources" "test"]
                       :extra-deps  {pdfboxing/pdfboxing {:mvn/version "0.1.14"}
                                     clj-http/clj-http   {:mvn/version "3.12.1"}}}
+           :cljs-runner {:extra-paths ["dev" "resources" "test"]
+                         :extra-deps  {org.clojure/clojurescript {:mvn/version "1.10.773"}}
+                         :main-opts   ["-m"  "cljs.main"
+                                       "-c"  "se.jherrlin.test_runner"
+                                       "-r"]}
            :runner   {:extra-paths ["dev" "resources" "test"]
                       :extra-deps  {pdfboxing/pdfboxing {:mvn/version "0.1.14"}
                                     clj-http/clj-http   {:mvn/version "3.12.1"}

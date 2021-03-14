@@ -1,7 +1,6 @@
 (ns se.jherrlin.iban
   "jherrlin.iban is a lib for validating and generating IBANs.
-  Generating is only available on JVM Clojure. It contains regexps and specs
-  with generators.
+  It contains regexps and specs with generators.
 
   Each country included in the registry have a different IBAN structure.
   Validation and generating can be made on all of them or on specific entries.

@@ -1,7 +1,8 @@
 (ns se.jherrlin.iban-test
   (:require
    [clojure.spec.alpha :as s]
-   [clojure.test :as t]
+   #?(:clj [clojure.test :as t])
+   #?(:cljs [cljs.test :as t :include-macros true])
    [clojure.test.check.generators :as gen]
    [se.jherrlin.iban :as iban]
    [se.jherrlin.iban.lib.registry :as registry]

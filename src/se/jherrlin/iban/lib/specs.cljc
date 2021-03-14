@@ -81,8 +81,9 @@
            (concat `(s/or))))
   )
 
-;; This s-exps are auto generated. Dont manually change them!
-;; They are here so that cljs can pick them up at compile time.
+;; This s-exps are auto generated from the code above. Dont manually change
+;; them! As the project aims to support both clj and cljs the s-exps below are
+;; static here instead for being evaluated at runtime.
 (clojure.spec.alpha/def
   :se.jherrlin.iban/TL
   (clojure.spec.alpha/with-gen
