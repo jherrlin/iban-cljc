@@ -146,6 +146,13 @@ Release 89 – March 2021" specification.
   The registry data structure can be reproduced using code in the
   =se.jherrlin.iban.registry.parser= namespace.
 
+* Run tests
+
+  #+BEGIN_SRC shell
+    clojure -M:clj-test-runner
+    clojure -M:cljs-test-runner
+  #+END_SRC
+
 * Update deps
 
   Instructions on how to update dependencies.
