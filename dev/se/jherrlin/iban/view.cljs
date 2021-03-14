@@ -1,11 +1,14 @@
 (ns se.jherrlin.iban.view
   (:require
    [clojure.spec.alpha :as s]
+   [clojure.test.check.generators :as gen]
    [se.jherrlin.iban :as iban]))
 
 (defn init []
   (println "Hello World"))
 
+(gen/generate (s/gen ::iban/iban))
+(gen/generate (s/gen ::iban/SE))
 (s/valid? ::iban/iban "LC55HEMM000100010012001200023015")
 (iban/regex :SE)
 (iban/regexs)
