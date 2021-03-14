@@ -1,4 +1,4 @@
-(ns se.jherrlin.iban.specs
+(ns se.jherrlin.iban.lib.specs
   "Specs and generators in this namespace is auto generated.
 
   Spec keywords are pointing at the se.jherrlin.iban namespace."
@@ -6,7 +6,7 @@
    [clojure.spec.alpha :as s]
    [clojure.string :as str]
    [clojure.test.check.generators :as gen]
-   [se.jherrlin.iban.registry :as registry]))
+   [se.jherrlin.iban.lib.registry :as registry]))
 
 
 (defn upper-case
@@ -54,9 +54,16 @@
                    (vals)
                    (map (fn [{:keys [iban-regex-strict id iban-structure]}]
                           `(s/def ~(keyword (str "se.jherrlin.iban/" (name id)))
-                             (s/and string?
-                                      (fn [~'s] (re-find (re-pattern ~iban-regex-strict) ~'s))))))
-                   doall)]
+                             (s/with-gen
+                               (s/and string?
+                                      (fn [~'s] (re-find (re-pattern ~iban-regex-strict) ~'s)))
+                               ~#(->> iban-structure
+                                      structure-regexps
+                                      (map (fn [[len _ c]]
+                                             ((get conversions-map c) len)))
+                                      (cons (gen/return (subs iban-structure 0 2)))
+                                      (apply gen/tuple)
+                                      (gen/fmap str/join)))))))]
   (eval s-exp))
 
 (eval

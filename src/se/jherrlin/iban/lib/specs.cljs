@@ -1,4 +1,4 @@
-(ns se.jherrlin.iban.specs
+(ns se.jherrlin.iban.lib.specs
   (:require
    [clojure.spec.alpha]))
 

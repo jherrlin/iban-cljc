@@ -1,4 +1,4 @@
-(ns se.jherrlin.iban.registry
+(ns se.jherrlin.iban.lib.registry
   "This namespace is only for storing the registry data structure.")
 
 

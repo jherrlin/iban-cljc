@@ -1,6 +1,7 @@
 (ns se.jherrlin.iban
   "jherrlin.iban is a lib for validating and generating IBANs.
-  It contains regexps and specs with generators.
+  Generating is only available on JVM Clojure. It contains regexps and specs
+  with generators.
 
   Each country included in the registry have a different IBAN structure.
   Validation and generating can be made on all of them or on specific entries.
@@ -21,24 +22,23 @@
   (iban/regexs)                                                ;; Regex that matches all IBANs.
   (iban/regex :SE)                                             ;; Regex to match Swe IBANs."
   (:require
-   [se.jherrlin.iban.registry :as iban.registry]
-   [se.jherrlin.iban.specs]))
-
+   [se.jherrlin.iban.lib.registry :as registry]
+   se.jherrlin.iban.lib.specs))
 
 (defn union-re-patterns
   "Combine regexps."
   [& patterns]
   (re-pattern (apply str (interpose "|" (map str patterns)))))
 
-#_(defn registry
+(defn registry
   "The IBAN registry data structure."
   []
-  iban.registry/data)
+  registry/data)
 
 (defn regexs
   "Takes an optional `registry` and returns a huge regex for all IBANs."
   ([]
-   (regexs iban.registry/data))
+   (regexs (registry)))
   ([registry]
    (->> registry
         :registry
@@ -50,20 +50,20 @@
 (defn regex
   "Regex for a single registry entry."
   ([id]
-   (regex iban.registry/data id))
+   (regex (registry) id))
   ([registry id]
    (re-pattern (get-in registry [:registry id :iban-regex]))))
 
 (defn regex-strict
   "Strict regex for a single registry entry."
   ([id]
-   (regex-strict iban.registry/data id))
+   (regex-strict (registry) id))
   ([registry id]
    (re-pattern (get-in registry [:registry id :iban-regex-strict]))))
 
 (defn info
   "Info about a registry entry."
   ([id]
-   (info iban.registry/data id))
+   (info (registry) id))
   ([registry id]
    (get-in registry [:registry id])))
