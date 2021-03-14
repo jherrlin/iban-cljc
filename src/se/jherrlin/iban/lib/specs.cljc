@@ -35,7 +35,7 @@
                                     (gen/choose 97 122)]))
              length)))
 
-(def parse-int #?(:clj  #(Character/digit % 10)
+(def parse-int #?(:clj  #(Integer. %)
                   :cljs #(js/parseInt %)))
 
 (def conversions-map

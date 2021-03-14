@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.test :as t]
             [pdfboxing.text :as text]
-            [se.jherrlin.iban.registry :as registry]
+            [se.jherrlin.iban.lib.registry :as registry]
             [se.jherrlin.iban.registry.parser :as parser]))
 
 
