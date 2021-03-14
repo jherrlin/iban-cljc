@@ -54,16 +54,9 @@
                    (vals)
                    (map (fn [{:keys [iban-regex-strict id iban-structure]}]
                           `(s/def ~(keyword (str "se.jherrlin.iban/" (name id)))
-                             (s/with-gen
-                               (s/and string?
-                                      (fn [~'s] (re-find (re-pattern ~iban-regex-strict) ~'s)))
-                               ~#(->> iban-structure
-                                      structure-regexps
-                                      (map (fn [[len _ c]]
-                                             ((get conversions-map c) len)))
-                                      (cons (gen/return (subs iban-structure 0 2)))
-                                      (apply gen/tuple)
-                                      (gen/fmap str/join)))))))]
+                             (s/and string?
+                                      (fn [~'s] (re-find (re-pattern ~iban-regex-strict) ~'s))))))
+                   doall)]
   (eval s-exp))
 
 (eval
