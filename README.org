@@ -1,9 +1,9 @@
-#+TITLE: IBAN validation ISO 13616-Compliant IBAN Formats, Release 89 – March 2021
+#+TITLE: IBAN validation ISO 13616-Compliant IBAN Formats, Release 90 – June 2021
 
 A library to validate and generate IBANs in Clojure/Script.
 
 The current version of the library validates agains the "SWIFT IBAN Registry,
-Release 89 – March 2021" specification.
+Release 90 – June 2021" specification.
 
 * Usage
 ** Specs

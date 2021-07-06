@@ -150,6 +150,11 @@
      :registry (registry pdf-text)}))
 
 (comment
+
+  (def registry-
+    "Add this one to registry.cljc"
+    (iban-registry! "https://www.swift.com/resource/iban-registry-pdf"))
+
   (def iban-registry-from-online
     (get (iban-registry! "https://www.swift.com/resource/iban-registry-pdf") :registry))
 

@@ -10,4 +10,4 @@
   (t/is (= (get registry/data :registry)
            (parser/registry
             (text/extract
-             (.getFile (io/resource "SWIFT_IBAN_Registry-downloaded-2021-03-06.pdf")))))))
+             (.getFile (io/resource "SWIFT_IBAN_Registry-downloaded-2021-07-06.pdf")))))))

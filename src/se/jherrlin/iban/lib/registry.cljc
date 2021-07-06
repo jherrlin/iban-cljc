@@ -4,7 +4,7 @@
 
 (def data
   {:url  "https://www.swift.com/resource/iban-registry-pdf",
-   :info "Release 89 – March 2021",
+   :info "Release 90 – June 2021",
    :registry
    {:TL
     {:electronic-format-example "TL380080012345678910157",
@@ -633,6 +633,17 @@
      :effective-date            "Jan-12",
      :print-format-example      "BH67 BMAG 0000 1299 1234 56",
      :country                   "Bahrain"},
+    :SD
+    {:electronic-format-example "SD2129010501234001",
+     :self-validate             true,
+     :iban-regex                "SD\\d{2}\\d{2}\\d{12}",
+     :iban-regex-strict         "^SD\\d{2}\\d{2}\\d{12}$",
+     :iban-length               18,
+     :iban-structure            "SD2!n2!n12!n",
+     :id                        :SD,
+     :effective-date            "Jul-21",
+     :print-format-example      "SD21 2901 0501 2340 01",
+     :country                   "Sudan"},
     :GE
     {:electronic-format-example "GE29NB0000000101904917",
      :self-validate             true,
