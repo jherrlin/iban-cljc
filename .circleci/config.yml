@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/clojure:tools-deps-node-browsers
+
+    steps:
+      - checkout
+      - run: clojure -M:clj-test-runner
+      - run: clojure -M:cljs-test-runner
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - test
